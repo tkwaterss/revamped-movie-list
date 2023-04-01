@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import MovieCard from "./MovieCard";
+import MovieContext from "../store/MovieContext";
 
 const MovieScreen = (props) => {
-  const { watchList, page, setPage, movieList, addMovie, removeMovie, displayMovie } = props;
+  const { page, setPage, addMovie, removeMovie, displayMovie } = props;
+  const { movieState } = useContext(MovieContext);
 
   const decrement = () => {
     return setPage(page - 1);
@@ -12,14 +14,13 @@ const MovieScreen = (props) => {
     return setPage(page + 1);
   };
 
-  const movieDisplay = movieList.map((movie) => {
+  const movieDisplay = movieState.movieList.map((movie) => {
     return (
       <MovieCard
         key={movie.id}
         movie={movie}
         addMovie={addMovie}
         removeMovie={removeMovie}
-        watchList={watchList}
         displayMovie={displayMovie}
       />
     );
@@ -30,9 +31,13 @@ const MovieScreen = (props) => {
       <h1>Tobin's Movie Theatre</h1>
       <h3>Add movies to your watchlist</h3>
       <div className="btn-container">
-        <button className="page-btn" onClick={page > 1 ? decrement: undefined}>-</button>
+        <button className="page-btn" onClick={page > 1 ? decrement : undefined}>
+          -
+        </button>
         <h3>Page {page}</h3>
-        <button className="page-btn" onClick={increment}>+</button>
+        <button className="page-btn" onClick={increment}>
+          +
+        </button>
       </div>
       <div className="movie-container">{movieDisplay}</div>
     </div>

@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import MovieCard from "./MovieCard";
+import MovieContext from "../store/MovieContext";
 
 const Watchlist = (props) => {
-  const { watchList, removeMovie, displayMovie } = props;
+  const { removeMovie, displayMovie } = props;
+  const { movieState } = useContext(MovieContext);
 
-  const movieDisplay = watchList.map((movie) => {
+  const movieDisplay = movieState.watchList.map((movie) => {
     return (
       <MovieCard
         key={movie.id}
         movie={movie}
         removeMovie={removeMovie}
-        watchList={watchList}
         displayMovie={displayMovie}
       />
     );

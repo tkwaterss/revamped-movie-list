@@ -8,19 +8,18 @@ import MovieDetails from "./components/MovieDetails";
 import MovieContext from "./store/MovieContext";
 
 function App() {
-  const [movieList, setMovieList] = useState([]);
-  const [watchList, setWatchList] = useState([]);
   const [page, setPage] = useState(1);
   const [display, setDisplay] = useState("MovieScreen");
-  const { dispatchMovie } = useContext(MovieContext);
+  const { movieState, dispatchMovie } = useContext(MovieContext);
 
-  const addMovie = (movie) => setWatchList([...watchList, movie]);
+  const addMovie = (movie) =>
+    dispatchMovie({ type: "ADD_MOVIE", payload: movie });
 
   const removeMovie = (movie) => {
-    const newState = watchList.filter((mov) => {
+    const newState = movieState.watchList.filter((mov) => {
       return mov !== movie;
     });
-    setWatchList(newState);
+    dispatchMovie({ type: "REMOVE_MOVIE", payload: newState });
   };
 
   const getData = () => {
@@ -29,7 +28,7 @@ function App() {
         `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}`
       )
       .then((res) => {
-        setMovieList(res.data.results);
+        dispatchMovie({ type: "GET_MOVIES", payload: res.data.results });
       });
   };
 
@@ -40,15 +39,12 @@ function App() {
   const displayMovie = (movie) => {
     setDisplay("MovieDetails");
     dispatchMovie({ type: "CHANGE_MOVIE", payload: movie });
-    // content = <MovieDetails />
   };
 
   let content = (
     <MovieScreen
-      watchList={watchList}
       page={page}
       setPage={setPage}
-      movieList={movieList}
       addMovie={addMovie}
       removeMovie={removeMovie}
       displayMovie={displayMovie}
@@ -57,11 +53,7 @@ function App() {
 
   if (display === "WatchList") {
     content = (
-      <Watchlist
-        watchList={watchList}
-        removeMovie={removeMovie}
-        displayMovie={displayMovie}
-      />
+      <Watchlist removeMovie={removeMovie} displayMovie={displayMovie} />
     );
   }
   if (display === "MovieDetails") {

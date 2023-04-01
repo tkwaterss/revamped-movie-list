@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import MovieContext from "../store/MovieContext";
 
 const MovieCard = (props) => {
-  const { movie, addMovie, removeMovie, watchList, displayMovie } = props;
+  const { movie, addMovie, removeMovie, displayMovie } = props;
+  const { movieState } = useContext(MovieContext);
 
-  const inWatchList = watchList.filter((mov) => {
+  const inWatchList = movieState.watchList.filter((mov) => {
     return mov.id === movie.id;
   });
 
