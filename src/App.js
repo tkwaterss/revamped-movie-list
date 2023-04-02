@@ -32,9 +32,7 @@ function App() {
       });
   };
 
-  useEffect(() => {
-    getData();
-  }, [page]);
+  useEffect(() => getData(), [page, display]);
 
   const displayMovie = (movie) => {
     setDisplay("MovieDetails");
@@ -62,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header setDisplay={setDisplay} />
+      <Header setDisplay={setDisplay} getData={getData} />
       <main>{content}</main>
     </div>
   );
